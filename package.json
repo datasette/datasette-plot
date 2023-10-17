@@ -1,0 +1,20 @@
+{
+  "name": "datasette-plot",
+  "version": "1.0.0",
+  "description": "[![PyPI](https://img.shields.io/pypi/v/datasette-plot.svg)](https://pypi.org/project/datasette-plot/) [![Changelog](https://img.shields.io/github/v/release/datasette/datasette-plot?include_prereleases&label=changelog)](https://github.com/datasette/datasette-plot/releases) [![Tests](https://github.com/datasette/datasette-plot/workflows/Test/badge.svg)](https://github.com/datasette/datasette-plot/actions?query=workflow%3ATest) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/datasette/datasette-plot/blob/main/LICENSE)",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@observablehq/plot": "^0.6.11",
+    "esbuild": "^0.19.4",
+    "preact": "^10.18.1"
+  }
+}

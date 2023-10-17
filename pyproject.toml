@@ -1,0 +1,37 @@
+[project]
+name = "datasette-plot"
+version = "0.1"
+description = "Observable Plot Datasette plugin"
+readme = "README.md"
+authors = [{name = "Alex Garcia"}]
+license = {text = "Apache-2.0"}
+classifiers=[
+    "Framework :: Datasette",
+    "License :: OSI Approved :: Apache Software License"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "datasette>=1.0a6"
+]
+
+[project.urls]
+Homepage = "https://github.com/datasette/datasette-plot"
+Changelog = "https://github.com/datasette/datasette-plot/releases"
+Issues = "https://github.com/datasette/datasette-plot/issues"
+CI = "https://github.com/datasette/datasette-plot/actions"
+
+[project.entry-points.datasette]
+plot = "datasette_plot"
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-asyncio"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+
+
+[tool.setuptools.packages.find]
+namespaces = false
+
+[tool.setuptools.package-data]
+datasette_plot = ["static/*", "templates/*"]
