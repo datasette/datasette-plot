@@ -437,7 +437,7 @@ interface DatasetteJsonResponse {
   truncated: boolean;
 }
 
-async function main() {
+export async function main() {
   const dataUrl = new URL(
     window.location.origin +
       window.location.pathname +
