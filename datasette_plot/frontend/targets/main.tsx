@@ -14,6 +14,8 @@ import {
   BarYOptions,
   LineYOptions,
   LinearRegressionYOptions,
+  lineY,
+  barY,
 } from "@observablehq/plot";
 
 const dataUrl =
@@ -317,7 +319,6 @@ function PlotEditor(props: {
   const [marks, setMarks] = useState<{ mark: Mark; options: MarkOptions }[]>(
     props.initalMarks ?? []
   );
-  console.debug("PlotEditor", props.initalMarks, marks);
 
   if (!show) {
     return (
@@ -379,6 +380,10 @@ function Preview(props: {
             return dot(props.data, m.options);
           case Mark.LinearRegressionY:
             return linearRegressionY(props.data, m.options);
+          case Mark.LineY:
+            return lineY(props.data, m.options);
+          case Mark.BarY:
+            return barY(props.data, m.options);
         }
       }),
     });
@@ -405,7 +410,7 @@ function Preview(props: {
 }
 async function main() {
   const data = (await fetch(dataUrl).then((r) => r.json())).rows as any[];
-  const target = document.querySelector("form");
+  const target = document.querySelector("form.sql");
   const root = document.createElement("div");
   target.insertAdjacentElement("afterend", root);
   const preact = root.appendChild(document.createElement("div"));
