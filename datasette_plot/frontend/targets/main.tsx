@@ -411,9 +411,10 @@ function Preview(props: {
 async function main() {
   const data = (await fetch(dataUrl).then((r) => r.json())).rows as any[];
   const target = document.querySelector("form.sql");
-  const root = document.createElement("div");
-  target.insertAdjacentElement("afterend", root);
-  const preact = root.appendChild(document.createElement("div"));
+  const root = target.insertAdjacentElement(
+    "afterend",
+    document.createElement("div")
+  );
 
   const columns = Object.keys(data[0]);
 
@@ -422,10 +423,10 @@ async function main() {
     ? url.searchParams.getAll("_plot-mark").map((d) => JSON.parse(d))
     : null;
   render(
-    <div>
+    <div className="datasette-plot">
       <PlotEditor data={data} columns={columns} initalMarks={initalMarks} />
     </div>,
-    preact
+    root
   );
   //root.appendChild(p);
 }
