@@ -18,12 +18,6 @@ import {
   barY,
 } from "@observablehq/plot";
 
-const dataUrl =
-  window.location.origin +
-  window.location.pathname +
-  ".json" +
-  window.location.search;
-
 function ColumnSelect(props: {
   title: string;
   columns: string[];
@@ -310,6 +304,24 @@ function MarkEditor(props: {
   );
 }
 
+function interestingColumns(columns: string[], sample: { [key: string]: any }) {
+  let x, y;
+  for (const column of columns) {
+    if (column === "rowid" || column === "id") continue;
+    if (typeof sample[column] === "number") {
+      if (x === undefined) {
+        x = column;
+      } else if (y === undefined) {
+        y = column;
+        break;
+      }
+    }
+  }
+  if (x === undefined) columns[0];
+  if (y === undefined) columns[1];
+  return [x, y];
+}
+
 function PlotEditor(props: {
   data: any;
   columns: string[];
@@ -329,7 +341,7 @@ function PlotEditor(props: {
   }
   return (
     <div>
-      <b>Marks</b>
+      <strong>Marks</strong>
       {marks.map((mark, idx) => (
         <MarkEditor
           columns={props.columns}
@@ -342,12 +354,21 @@ function PlotEditor(props: {
       ))}
       <button
         onClick={() => {
+          console.log(marks);
+          let x, y;
+          if (marks.length) {
+            x = marks[marks.length - 1].options.x;
+            y = marks[marks.length - 1].options.y;
+          } else {
+            [x, y] = interestingColumns(props.columns, props.data[0]);
+          }
+
           setMarks([
             ...marks,
             {
               mark: Mark.Dot,
               // @ts-ignore TODO: x/y dont exist in MarkOptions
-              options: { x: props.columns[0], y: props.columns[1] },
+              options: { x, y },
             },
           ]);
         }}
@@ -408,15 +429,37 @@ function Preview(props: {
     </div>
   );
 }
+
+interface DatasetteJsonResponse {
+  rows: { [key: string]: null | string | number };
+  ok: boolean;
+  next: string | null;
+  truncated: boolean;
+}
+
 async function main() {
-  const data = (await fetch(dataUrl).then((r) => r.json())).rows as any[];
-  const target = document.querySelector("form.sql");
+  const dataUrl = new URL(
+    window.location.origin +
+      window.location.pathname +
+      ".json" +
+      window.location.search
+  );
+  if (!dataUrl.searchParams.has("_size")) {
+    dataUrl.searchParams.set("_size", "max");
+  }
+
+  const data = (await fetch(dataUrl).then((r) =>
+    r.json()
+  )) as DatasetteJsonResponse;
+  const target =
+    document.querySelector("form.sql") ||
+    document.querySelector("form.filters");
   const root = target.insertAdjacentElement(
     "afterend",
     document.createElement("div")
   );
 
-  const columns = Object.keys(data[0]);
+  const columns = Object.keys(data.rows[0]);
 
   const url = new URL(window.location.href);
   const initalMarks = url.searchParams.has("_plot-mark")
@@ -424,10 +467,19 @@ async function main() {
     : null;
   render(
     <div className="datasette-plot">
-      <PlotEditor data={data} columns={columns} initalMarks={initalMarks} />
+      <PlotEditor
+        data={data.rows}
+        columns={columns}
+        initalMarks={initalMarks}
+      />
+      {data.next !== null ? (
+        <div>
+          Warning: not all table rows returned, only {data.rows.length} rows
+        </div>
+      ) : null}
     </div>,
     root
   );
-  //root.appendChild(p);
 }
-main();
+
+document.addEventListener("DOMContentLoaded", main);
