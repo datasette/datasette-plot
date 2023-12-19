@@ -2,9 +2,11 @@ flags := ""
 
 js:
   ./node_modules/.bin/esbuild \
-    --bundle --format=esm  --jsx-factory=h --jsx-fragment=Fragment {{flags}} \
+    --bundle --minify --format=esm  --jsx-factory=h --jsx-fragment=Fragment {{flags}} \
     --out-extension:.js=.min.js \
-    datasette_plot/frontend/targets/* \
+    --out-extension:.css=.min.css \
+    datasette_plot/frontend/targets/*.tsx \
+    --target=safari12 \
     --outdir=datasette_plot/static
 
 dev:
