@@ -5,7 +5,7 @@
 [![Tests](https://github.com/datasette/datasette-plot/workflows/Test/badge.svg)](https://github.com/datasette/datasette-plot/actions?query=workflow%3ATest)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/datasette/datasette-plot/blob/main/LICENSE)
 
-A Datasette plugin for making data visualizations with [Observable Plot](https://observablehq.com/plot/) .
+A Datasette plugin for making data visualizations with [Observable Plot](https://observablehq.com/plot/).
 
 <img width="600px" src="https://datasette-cloud-assets.s3.amazonaws.com/blog/2023/datasette-plot/hero.jpeg"/>
 
