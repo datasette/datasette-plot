@@ -9,6 +9,7 @@ import {
   MarkOptions,
   lineY,
   barY,
+  areaY,
 } from "@observablehq/plot";
 
 import { MarkEditor, Mark } from "../components/marks";
@@ -29,6 +30,10 @@ function interestingColumns(columns: string[], sample: { [key: string]: any }) {
   if (x === undefined) columns[0];
   if (y === undefined) columns[1];
   return [x, y];
+}
+
+interface Row {
+  [key: string]: string | null | number | Date;
 }
 
 function PlotEditor(props: {
@@ -82,6 +87,9 @@ function PlotEditor(props: {
           onUpdate={(mark, options) => {
             setMarks(marks.map((d, i) => (i === idx ? { mark, options } : d)));
           }}
+          onDelete={() => {
+            setMarks(marks.filter((d, i) => i !== idx));
+          }}
         />
       ))}
       <button onClick={onAdddMark}>Add new visualization mark</button>
@@ -96,8 +104,8 @@ function Preview(props: {
   useEffect(() => {
     if (!target.current) return;
     const p = plot({
+      width: 800,
       color: { legend: true },
-
       marks: props.marks.map((m) => {
         switch (m.mark) {
           case Mark.Dot:
@@ -108,6 +116,8 @@ function Preview(props: {
             return lineY(props.data, m.options);
           case Mark.BarY:
             return barY(props.data, m.options);
+          case Mark.AreaY:
+            return areaY(props.data, m.options);
         }
       }),
     });
@@ -134,11 +144,12 @@ function Preview(props: {
 }
 
 function App(props: {
-  data: any;
+  rows: any[];
+  next: string | null;
   columns: string[];
   initialMarks?: { mark: Mark; options: MarkOptions }[];
 }) {
-  const { data, columns, initialMarks } = props;
+  const { rows, next, columns, initialMarks } = props;
   const [show, setShow] = useState<boolean>(props.initialMarks !== null);
   if (!show) {
     return (
@@ -150,23 +161,17 @@ function App(props: {
 
   return (
     <div className="datasette-plot">
-      <PlotEditor
-        data={data.rows}
-        columns={columns}
-        initialMarks={initialMarks}
-      />
-      {data.next !== null ? (
-        <div>
-          Warning: not all table rows returned, only {data.rows.length} rows
-        </div>
-      ) : null}
       <button onClick={() => setShow(false)}>Hide Plot</button>
+      <PlotEditor data={rows} columns={columns} initialMarks={initialMarks} />
+      {next !== null ? (
+        <div>Warning: not all table rows returned, only {rows.length} rows</div>
+      ) : null}
     </div>
   );
 }
 
 interface DatasetteJsonResponse {
-  rows: { [key: string]: null | string | number };
+  rows: { [key: string]: null | string | number }[];
   ok: boolean;
   next: string | null;
   truncated: boolean;
@@ -186,6 +191,18 @@ export async function main() {
   const data = (await fetch(dataUrl).then((r) =>
     r.json()
   )) as DatasetteJsonResponse;
+  const columns = Object.keys(data.rows[0]);
+
+  // for now, any column named "date" should be converted to JS dates.
+  const rows: Row[] = data.rows.slice();
+  for (const column of columns) {
+    if (column.toLowerCase() == "date") {
+      for (const row of rows) {
+        row[column] = new Date(row[column]);
+      }
+    }
+  }
+
   const target =
     document.querySelector("form.sql") ||
     document.querySelector("form.filters");
@@ -194,14 +211,17 @@ export async function main() {
     document.createElement("div")
   );
 
-  const columns = Object.keys(data.rows[0]);
-
   const url = new URL(window.location.href);
   const initialMarks = url.searchParams.has("_plot-mark")
     ? url.searchParams.getAll("_plot-mark").map((d) => JSON.parse(d))
     : null;
   render(
-    <App initialMarks={initialMarks} data={data} columns={columns} />,
+    <App
+      initialMarks={initialMarks}
+      rows={rows}
+      columns={columns}
+      next={data.next}
+    />,
     root
   );
 }

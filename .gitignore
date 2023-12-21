@@ -15,3 +15,5 @@ node_modules/
 
 *.csv
 *.db
+
+tests/data

@@ -4,9 +4,21 @@
 
   & .mark-editor {
     border: 1px solid black;
-    max-width: 240px;
+    max-width: 320px;
     padding: 0.5rem;
     margin-bottom: 0.5rem;
+
+    & .mark-editor-header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    & .delete-mark {
+      background: none;
+      border: none;
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
 
   & .channel-value-selector {

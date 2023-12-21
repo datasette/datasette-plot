@@ -29,7 +29,10 @@ function ChanelValueSelector(props: {
 
   return (
     <div className="channel-value-selector">
-      <div className={"title-bar " + (!required ? "toggleable" : "")}>
+      <div
+        className={"title-bar " + (!required ? "toggleable" : "")}
+        onClick={!show ? () => setShow((d) => !d) : null}
+      >
         <div style="display: flex; justify-content: space-between; width: 100%;">
           <div className="dp-title">{title}</div>
           <div>
@@ -163,9 +166,10 @@ function BarEditor(props: {
 }) {
   const [x, setX] = useState<string>(props.options.x as string);
   const [y, setY] = useState<string>(props.options.y as string);
+  const [fill, setFill] = useState<string>(props.options.fill as string);
   useEffect(() => {
-    props.onUpdate({ x, y, tip: true });
-  }, [x, y]);
+    props.onUpdate({ x, y, fill, tip: true });
+  }, [x, y, fill]);
   return (
     <div>
       <ChanelValueSelector
@@ -180,6 +184,13 @@ function BarEditor(props: {
         title="Y"
         value={y}
         setValue={setY}
+        columns={props.columns}
+      />
+      <ChanelValueSelector
+        required={false}
+        title="Fill"
+        value={fill}
+        setValue={setFill}
         columns={props.columns}
       />
     </div>
@@ -273,6 +284,7 @@ export function MarkEditor(props: {
   initalMark: Mark;
   initionalOptions: MarkOptions;
   onUpdate: (m: Mark, o: MarkOptions) => void;
+  onDelete: () => void;
 }) {
   let [mark, setMark] = useState<Mark>(props.initalMark);
   let [options, setOptions] = useState<MarkOptions>(props.initionalOptions);
@@ -327,19 +339,28 @@ export function MarkEditor(props: {
   }
   return (
     <div className="mark-editor">
-      <div>
-        <select
-          value={mark}
-          onChange={(e) =>
-            setMark((e.target as HTMLSelectElement).value as Mark)
-          }
-        >
-          <option value={Mark.Dot}>Dot</option>
-          <option value={Mark.LinearRegressionY}>Linear Regression (y)</option>
-          <option value={Mark.BarY}>Bar (y)</option>
-          <option value={Mark.AreaY}>Area (y)</option>
-          <option value={Mark.LineY}>Line (y)</option>
-        </select>
+      <div className="mark-editor-header">
+        <div>
+          <select
+            value={mark}
+            onChange={(e) =>
+              setMark((e.target as HTMLSelectElement).value as Mark)
+            }
+          >
+            <option value={Mark.Dot}>Dot</option>
+            <option value={Mark.LinearRegressionY}>
+              Linear Regression (y)
+            </option>
+            <option value={Mark.BarY}>Bar (y)</option>
+            <option value={Mark.AreaY}>Area (y)</option>
+            <option value={Mark.LineY}>Line (y)</option>
+          </select>
+        </div>
+        <div>
+          <button className="delete-mark" onClick={props.onDelete}>
+            Delete mark
+          </button>
+        </div>
       </div>
       <div>{render()}</div>
     </div>
