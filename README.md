@@ -25,7 +25,7 @@ Once installed, table pages and SQL query pages will have a new "Show plot" butt
 
 Currently, `datasette-plot` only supports a few [visualization marks](https://observablehq.com/plot/features/marks) from Plot, including dot, line, area, bar, and more.
 
-https://github.com/datasette/datasette-plot/assets/15178711/9d6f5f37-b827-44e2-a8f5-e3e552701771
+<video src="https://github.com/datasette/datasette-plot/assets/15178711/9d6f5f37-b827-44e2-a8f5-e3e552701771"></video>
 
 Use the `Link to this plot` URL to share visualization with others. The link will have your plot options encoded in the URL.
 
