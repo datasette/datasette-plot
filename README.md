@@ -23,11 +23,9 @@ Once installed, table pages and SQL query pages will have a new "Show plot" butt
 
 <img width="600px" src="https://datasette-cloud-assets.s3.amazonaws.com/blog/2023/datasette-plot/table-2.jpeg"/>
 
-Current, `datasette-plot` only supports a few [visualization marks](https://observablehq.com/plot/features/marks) from Plot, including dot, line, area, bar, and more.
+Currently, `datasette-plot` only supports a few [visualization marks](https://observablehq.com/plot/features/marks) from Plot, including dot, line, area, bar, and more.
 
-<video width=600 controls autoplay type="video/mp4" style="display: block; margin: 0 auto" >
-  <source src="https://datasette-cloud-assets.s3.amazonaws.com/blog/2023/datasette-plot/dsc-plot-02.mp4" type="video/mp4">
-    Your browser does not support the video tag.
+<video width=600 controls autoplay src="https://datasette-cloud-assets.s3.amazonaws.com/blog/2023/datasette-plot/dsc-plot-02.mp4" type="video/mp4" style="display: block; margin: 0 auto" >
 </video>
 
 Use the `Link to this plot` URL to share visualization with others. The link will have your plot options encoded in the URL.
