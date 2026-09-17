@@ -4,10 +4,10 @@ version = "0.1.0a1"
 description = "Observable Plot Datasette plugin"
 readme = "README.md"
 authors = [{name = "Alex Garcia"}]
-license = {text = "Apache-2.0"}
-classifiers=[
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+classifiers = [
     "Framework :: Datasette",
-    "License :: OSI Approved :: Apache Software License"
 ]
 requires-python = ">=3.10"
 dependencies = [
@@ -23,15 +23,21 @@ CI = "https://github.com/datasette/datasette-plot/actions"
 [project.entry-points.datasette]
 plot = "datasette_plot"
 
-[project.optional-dependencies]
-test = ["pytest", "pytest-asyncio", "ruff"]
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+]
 
 [tool.pytest.ini_options]
 asyncio_mode = "strict"
 
+[build-system]
+requires = ["uv_build>=0.12.9,<0.13.0"]
+build-backend = "uv_build"
 
-[tool.setuptools.packages.find]
-namespaces = false
-
-[tool.setuptools.package-data]
-datasette_plot = ["static/*", "templates/*"]
+[tool.uv.build-backend]
+module-root = ""
+# The TypeScript sources are compiled to static/ - keep them out of the wheel
+wheel-exclude = ["datasette_plot/frontend"]

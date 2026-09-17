@@ -16,7 +16,7 @@ dev:
       --root test.db
 
 test:
-  pytest
+  uv run pytest
 
 format:
   black .

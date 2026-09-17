@@ -31,22 +31,11 @@ Use the `Link to this plot` URL to share visualization with others. The link wil
 
 ## Development
 
-To set up this plugin locally, first checkout the code. Then create a new virtual environment:
+To set up this plugin locally, first checkout the code. Then run the tests using [uv](https://docs.astral.sh/uv/):
 
 ```bash
 cd datasette-plot
-python3 -m venv venv
-source venv/bin/activate
+uv run pytest
 ```
 
-Now install the dependencies and test dependencies:
-
-```bash
-pip install -e '.[test]'
-```
-
-To run the tests:
-
-```bash
-pytest
-```
+This will create a virtual environment and install the dependencies and test dependencies automatically.
