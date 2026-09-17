@@ -11,7 +11,7 @@ classifiers=[
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "datasette==1.0a19"
+    "datasette>=1.0a40"
 ]
 
 [project.urls]
